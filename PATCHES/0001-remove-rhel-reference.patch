@@ -1,0 +1,26 @@
+From 089f66db0a57c265b8d36d0900be3fa1133ebc9a Mon Sep 17 00:00:00 2001
+From: rpm-build <rpm-build>
+Date: Tue, 30 Apr 2024 15:47:08 +0000
+Subject: [PATCH] Update branding
+
+Signed-off-by: Alex Burmashev <alexander.burmashev@oracle.com>
+---
+ apps/fipsinstall.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/apps/fipsinstall.c b/apps/fipsinstall.c
+index e978057..60bc9db 100644
+--- a/apps/fipsinstall.c
++++ b/apps/fipsinstall.c
+@@ -311,7 +311,7 @@ int fipsinstall_main(int argc, char **argv)
+     EVP_MAC *mac = NULL;
+     CONF *conf = NULL;
+ 
+-    BIO_printf(bio_err, "This command is not enabled in the Red Hat Enterprise Linux OpenSSL build, please consult Red Hat documentation to learn how to enable FIPS mode\n");
++    BIO_printf(bio_err, "This command is not enabled in OpenSSL build, please consult documentation to learn how to enable FIPS mode\n");
+     return 1;
+ 
+     if ((opts = sk_OPENSSL_STRING_new_null()) == NULL)
+-- 
+2.39.3
+
