@@ -1,2 +1,1 @@
-1c3441ec3b0d5282a2365217da15dac32d331e0ec5a8e65402068a2cf4fa918e SOURCES/fips_module-3.0.7-18.el9_2.tar.gz
-4105046836812ed422922f851a57500118a99cc0f009b7eff2b3436110393377 SOURCES/openssl-3.0.7-hobbled.tar.gz
+893cc0b4b7f113f552edf2fc32e40068198cbb9f3bc2b08b44030e2dcdcfa347 SOURCES/openssl-fips-provider-3.0.7.tar.gz
