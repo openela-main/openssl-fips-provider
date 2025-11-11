@@ -16,7 +16,7 @@
 Summary:              FIPS module for OpenSSL
 Name:                 openssl-fips-provider
 Version:              3.0.7
-Release:              6%{?dist}.openela.0.1
+Release:              8%{?dist}.openela.0.1
 
 # We have to remove certain patented algorithms from the openssl source
 # tarball with the hobble-openssl script which is included below.
@@ -42,6 +42,7 @@ BuildRequires:        perl(Time::HiRes), perl(IPC::Cmd), perl(Pod::Html), perl(D
 BuildRequires:        perl(FindBin), perl(lib), perl(File::Compare), perl(File::Copy), perl(bigint)
 BuildRequires:        git-core
 Requires:             %{name}-so = %{version}-%{release}
+Provides:             fips-provider-so
 
 %description
 This package provides a custom build of the OpenSSL FIPS module that has been
@@ -54,6 +55,7 @@ submitted to NIST for certification.
 Summary:              FIPS module for OpenSSL
 Requires:             coreutils
 Conflicts:            openssl-libs < 1:3.0.7-26
+Conflicts:            fips-provider-next
 Obsoletes:            openssl-fips-provider < 3.0.7-3
 
 %description so
@@ -192,8 +194,16 @@ install -d $RPM_BUILD_ROOT%{_pkgdocdir}
 install -m644 %{SOURCE3} $RPM_BUILD_ROOT%{_pkgdocdir}/README.md
 
 %changelog
-* Tue Nov 12 2024 Release Engineering <releng@openela.org> - 3.0.7.openela.0.1
+* Tue Nov 11 2025 Release Engineering <releng@openela.org> - 3.0.7.openela.0.1
 - Add OpenELA specific changes
+
+* Wed Jul 23 2025 Simo Sorce <ssorce@redhat.com> - 3.0.7-8
+- Add missing Conficts
+  Related: RHEL-105007
+
+* Wed Jul 23 2025 Simo Sorce <ssorce@redhat.com> - 3.0.7-7
+- Fix Requires/Provides to fix default install of fips providers
+  Resolves: RHEL-105007
 
 * Tue Sep 10 2024 Simo Sorce <ssorce@redhat.com> - 3.0.7-6
 - Try to fix an upgrade issue with pkg version numbers
