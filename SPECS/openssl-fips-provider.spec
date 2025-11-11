@@ -16,7 +16,7 @@
 Summary: FIPS module for OpenSSL
 Name: openssl-fips-provider
 Version: 3.0.7
-Release: 6%{?dist}
+Release: 8%{?dist}
 
 # We have to remove certain patented algorithms from the openssl source
 # tarball with the hobble-openssl script which is included below.
@@ -40,6 +40,7 @@ BuildRequires: perl(Time::HiRes), perl(IPC::Cmd), perl(Pod::Html), perl(Digest::
 BuildRequires: perl(FindBin), perl(lib), perl(File::Compare), perl(File::Copy), perl(bigint)
 BuildRequires: git-core
 Requires: %{name}-so = %{version}-%{release}
+Provides: fips-provider-so
 
 %description
 This package provides a custom build of the OpenSSL FIPS module that has been
@@ -53,6 +54,7 @@ Summary: FIPS module for OpenSSL
 Requires: coreutils
 Conflicts: openssl-libs < 1:3.0.7-26
 Conflicts: openssl-fips-provider <= 3.0.7-2
+Conflicts: fips-provider-next
 
 %description so
 This package provides a custom build of the OpenSSL FIPS module that has been
@@ -190,6 +192,10 @@ install -d $RPM_BUILD_ROOT%{_pkgdocdir}
 install -m644 %{SOURCE3} $RPM_BUILD_ROOT%{_pkgdocdir}/README.md
 
 %changelog
+* Thu Jul 24 2025 Simo Sorce <ssorce@redhat.com> - 3.0.7-8
+- Fix Requires/Provides to fix default install of fips providers
+  Resolves: RHEL-105014
+
 * Tue May 07 2024 Dmitry Belyavskiy <dbelyavs@redhat.com> - 3.0.7-6
 - Adjust build flags for successful build for RHEL10
   Resolves: RHEL-30258
