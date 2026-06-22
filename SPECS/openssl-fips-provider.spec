@@ -1,27 +1,14 @@
-# For the curious:
-# 0.9.8jk + EAP-FAST soversion = 8
-# 1.0.0 soversion = 10
-# 1.1.0 soversion = 1.1 (same as upstream although presence of some symbols
-#                        depends on build configuration options)
-# 3.0.0 soversion = 3 (same as upstream)
-%define soversion 3
-
-# Arches on which we need to prevent arch conflicts on opensslconf.h, must
-# also be handled in opensslconf-new.h.
-%define multilib_arches %{ix86} ia64 %{mips} ppc ppc64 s390 s390x sparcv9 sparc64 x86_64
-
 %global debug_package %{nil}
-%define orig_release 18.el9_2
+%define orig_release 11.el9_0
 
 Summary:              FIPS module for OpenSSL
 Name:                 openssl-fips-provider
 Version:              3.0.7
-Release:              8%{?dist}.openela.0.1
+Release:              11%{?dist}.openela.0.1
 
-# We have to remove certain patented algorithms from the openssl source
-# tarball with the hobble-openssl script which is included below.
-# The original openssl upstream tarball cannot be shipped in the .src.rpm.
-Source:               %{name}-%{version}.tar.gz
+# This tarball contain the "gold" build with the binary module we bring to
+# certification, not directly the original openssl source it was built from.
+Source:               %{name}-%{version}-1.tar.gz
 Source1:              extract-src.sh
 Source2:              extract-fips.sh
 Source3:              README.md
@@ -86,7 +73,7 @@ package or when debugging this package.
 
 %prep
 tar xf %{SOURCE0}
-%{SOURCE1} %{version} %{orig_release}
+%{SOURCE1} %{name} %{version} %{orig_release}
 
 ## NOTE: we do a full build every time to endure our ability to build
 ## from source as needed, but in RHEL we ultimately throw away all
@@ -184,18 +171,30 @@ popd
 %check
 #We re not using the actual built bits, so skip any checks on those binaries.
 
+# Defeat tool that try to mess with the binaries likely debuginfo
+# stripping tools) after they are laid down on the file system.
+# Overwrite the binaries in post install
+%define __spec_install_post \
+    %{?__debug_package:%{__debug_install_post}} \
+    %{__arch_install_post} \
+    %{__os_install_post} \
+    %{SOURCE2} %{name} %{version} %{orig_release} \
+%{nil}
+
+
 %install
 #we are not actually installing the build, as we replace all contents with the
 #content from the original rpms
-export ORIGINAL_PACKAGE_VERSION=%{version}
-export ORIGINAL_PACKAGE_RELEASE=%{orig_release}
-%{SOURCE2}
 install -d $RPM_BUILD_ROOT%{_pkgdocdir}
 install -m644 %{SOURCE3} $RPM_BUILD_ROOT%{_pkgdocdir}/README.md
 
 %changelog
-* Tue Nov 11 2025 Release Engineering <releng@openela.org> - 3.0.7.openela.0.1
+* Mon Jun 22 2026 Release Engineering <releng@openela.org> - 3.0.7.openela.0.1
 - Add OpenELA specific changes
+
+* Tue Jun 2 2026 Simo Sorce <ssorce@redhat.com> - 3.0.7-11
+- Update sources and scripts for new build, to address CVE-2026-31790
+  Resolves: RHEL-173517
 
 * Wed Jul 23 2025 Simo Sorce <ssorce@redhat.com> - 3.0.7-8
 - Add missing Conficts
